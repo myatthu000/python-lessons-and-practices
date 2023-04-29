@@ -1,0 +1,5 @@
+{0:{'user':'winwin','email':'win@gmail.com','password':'password','phone': 12,'age':23},
+1:{'user':'myatmyat','email':'myat@gmail.com','password':'password','phone': 12,'age':20},
+2:{'user': 'yy','email': 'uu@gmail.com', 'password': 'password', 'phone': 12, 'age': 23},
+3:{'user': 'uu','email': 'uu@gmail.com', 'password': 'password', 'phone': 12, 'age': 23}}
+

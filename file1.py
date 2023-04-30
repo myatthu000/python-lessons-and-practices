@@ -4,6 +4,9 @@
 # with open('test2.txt','a') as file:
 #     file.write(data)
 #     file.write('\n')
+
+
+
 id = 0
 
 distt = {
@@ -41,12 +44,12 @@ print('len',length)
 
 data_base: dict = {}
 
-with open("1_assignment.txt",'r') as readFile:
-    datas = readFile.read()
+# with open("1_assignment.txt",'r') as readFile:
+#     datas = readFile.read()
     # print(type(datas))
     # data_base[] = datas
-    data_dist_from_str = eval(datas)
-    data_base = data_dist_from_str
+    # data_dist_from_str = eval(datas)
+    # data_base = data_dist_from_str
     # print(data_dist_from_str)
     # print(type(data_dist))
     # data_base = eval(datas)
@@ -59,15 +62,31 @@ with open("1_assignment.txt",'r') as readFile:
 
 # print(data_base)
 #     print('length ',len(data_base[i]))
-    for i in range(len(data_base)):
+#     for i in range(len(data_base)):
         # id = len(data_base[i])
         # print("username : {0}".format(data_base[i]['user']))
-        print("id: {0} username: {1} email: {2} password: {3} phone_number: {4} age: {5}".format(len(data_base[i]),data_base[i]['user'],data_base[i]['email'],data_base[i]['password'],data_base[i]['phone'],data_base[i]['age']))
+        # print("id: {0} username: {1} email: {2} password: {3} phone_number: {4} age: {5}".format(len(data_base[i]),data_base[i]['user'],data_base[i]['email'],data_base[i]['password'],data_base[i]['phone'],data_base[i]['age']))
 
-readFile.close()
+# readFile.close()
+
+datas = {4: {'email': 'yy@gmail.com', 'u_name': 'yy', 'password': 'password', 'phone': 91212121, 'age': 23}}
+
+key = datas.keys()
+value = datas.values()
+print(key,value)
+
+def recording_all_data_to_file(data):
+    with open("2_assignment.txt",'a') as writeFile:
+        writeFile.write(data)
+        writeFile.write('\n')
+    writeFile.close()
+
 
 print(len(data_base))
 
 # print(len(dir(dict)))
 # for i in range(len(dir(dict))):
 #     print("-->", format(dir(dict)[i]))
+
+if __name__ == '__main__':
+    recording_all_data_to_file(str([key,value]))

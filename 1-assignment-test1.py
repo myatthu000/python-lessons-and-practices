@@ -25,10 +25,10 @@ def main_sector():
 
 def registration():
     id = loading_all_data()[0]
-    print('id', id)
+    # print('id', id)
     global db1
     db = loading_all_data()[1]
-    print('db = ',db)
+    # print('db = ',db)
 
     user_email = input("Enter your email:")
     email_get = Email_exit(user_email)
@@ -99,7 +99,7 @@ def create_txt_file():
         with open('3_assignment.txt', 'x') as createFile:
             createFile.close()
     except FileExistsError:
-        print("Text file already exit\ \n")
+        print("Text file already exit \n")
 
 
 def loading_all_data():
@@ -109,7 +109,7 @@ def loading_all_data():
         with open('3_assignment.txt', 'r') as readFile:
             datas = readFile.read()
             data_dist_from_str = eval(datas)
-            print('---->', data_dist_from_str)
+            # print('---->', data_dist_from_str)
             db = data_dist_from_str
             id = len(db)
             readFile.close()
@@ -134,7 +134,7 @@ def loading_all_data():
 
 def printing_all_data():
     datas = loading_all_data()[1]
-    print('datas ---> ',datas)
+    # print('datas ---> ',datas)
     for i in range(len(datas)):
         print("user_id: {0} username: {1} email: {2} password: {3} phone_number: {4} age: {5}".format(i,
                                                                                                  datas[i][

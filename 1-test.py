@@ -100,10 +100,10 @@ def recording_all_data(datas):
 
 
 def printing_all_data():
-    # if db
-    print('db \n', db == )
-    counter = len(db)
-    # print('counter \n', counter)
+    if db != {}:
+        print('db \n', db)
+        counter = len(db)
+        # print('counter \n', counter)
 
 
 def loading_all_data():

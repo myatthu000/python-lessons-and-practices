@@ -1,0 +1,1 @@
+{0: {'u_name': 'myatt', 'email': 'myat@gmail.com', 'password': 'password', 'phone': 911111, 'age': 23}, 1: {'u_name': 'thu', 'email': 'thu@gmail.com', 'password': 'password', 'phone': 92222, 'age': 23}}

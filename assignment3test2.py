@@ -61,7 +61,7 @@ def registration():
 def login():
     print("\nLogin Your Account")
 
-    user_found=-1;
+    user_found=-1
     print("This is login sector")
     l_user_email = input("Enter your email to login:")
     l_user_password = input("Enter your password to login:")

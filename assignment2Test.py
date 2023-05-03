@@ -3,6 +3,7 @@
 
 
 from ast import literal_eval
+from time import sleep
 
 db={}
 global counter
@@ -21,13 +22,15 @@ def main_sector():
     elif main_option=='2':
         login()
     elif main_option=='3':
+        print("....................... Bye Bye .....................\n")
+        sleep(1)
         exit(1)
     else:
         print("Invalid Option")
         main_sector()
 
 def registration():
-    print("Register Your Account")
+    print("\nRegister Your Account")
     global counter, db
     user_email = input("Enter your email:")
     email_get = Email_exit(user_email)
@@ -40,16 +43,15 @@ def registration():
         user_password = input("Enter your password:")
         user_phone = int(input("Enter your phone:"))
         user_age = int(input("Enter your age:"))
-
         # id = len(db)
         id = counter
-
         # to_insert = {counter: {'user': user_name, 'email': user_email, 'password': user_password, 'phone': user_phone, 'age': user_age}}
-
         to_insert = {id: {"u_name": user_name, "email": user_email, "password": user_password, "phone": user_phone, "age": user_age}}
         db.update(to_insert)
         print("\n")
-        printing_all_data()
+        print("Register Successfully: ")
+        # printing_all_data()
+        printing_single_data(db,id)
         print("\n")
         recording_all_data(str(db))
         counter = len(db)
@@ -57,7 +59,7 @@ def registration():
 
 
 def login():
-    print("Login Your Account")
+    print("\nLogin Your Account")
 
     user_found=-1;
     print("This is login sector")
@@ -76,50 +78,41 @@ def login():
         print("Not Found ")
 
 def user_profile(user_found):
-    print("Welcome:",db[user_found]["u_name"])
-
-    user_options = str(input("\nPress 1 to Update User Information \nPress 2 to Exit \n"))
-    while(user_options):
-        if user_options == '1':
-            edit_user_info(user_found)
-        elif user_options == '2':
-            print("\nLogin user {0} is exited \n".format(db[user_found]["u_name"]))
-            recording_all_data(str(db))
-        else:
-            print("Invalid Option:\n")
-            user_profile(user_found)
-            break
+    print("\nWelcome:",db[user_found]["u_name"])
+    printing_all_data()
+    user_options = str(input("\nPress [1] to Update User Information \nPress [2] to Logout \n"))
+# while(user_options):
+    if user_options == '1':
+        edit_user_info(user_found)
+        # break
+    elif user_options == '2':
+        print("\nLogin user {0} is logout \n".format(db[user_found]["u_name"]))
+        # recording_all_data(str(db))
+        # break
+    else:
+        print("Invalid Option:\n")
+        user_profile(user_found)
+        # break
+    # break
 
 def edit_user_info(user_found):
-    print("Please Enter User Email To Update Info \n")
+    print("\n\nUser Information Edit Section : ")
     # edit_email is used for edit
-    edit_email = str(input("\nEnter User Email to Edit Info :"))
+    edit_email = str(input("Enter User Email to Edit Info : \nOr Type [cancel] to Cancel edition : "))
     datas = db
     email_id = Email_exit(edit_email)
-    if email_id !=None:
-        printing_single_data(datas,email_id)
-        print("\nEdit Account \n")
-        edit_email_option = str(input("\nEnter 1 to edit email: \nEnter 2 to edit username: \nEnter 3 to edit password: \n"))
-        if edit_email_option == '1':
-            print("Edit Email: \n")
-            edit_email_data = str(input("Edit email:... "))
-            datas[email_id]['email'] = edit_email_data
+    if edit_email != "cancel":
+        if email_id !=None:
             printing_single_data(datas,email_id)
-            # record in txt file left
-            print("\nSuccessfully updated email:... \n")
-
-        elif edit_email_option == '2':
-            print("Edit Username: \n")
-        elif edit_email_option == '3':
-            print("Edit Password: \n")
-        elif edit_email_option == '4':
-            print("exit: \n")
-            user_profile(user_found)
+            print("\nEdit Account Section :")
+            user_edit_data_choice_section(datas,email_id,user_found)
         else:
-            print("Invalid Option \n")
-            user_profile(user_found)
+            print("\n{0} email does not exit in database : ".format(edit_email))
     else:
-        print("\n{0} email does not exit \n".format(edit_email))
+        sleep(2)
+        print("going back to user profile .....")
+        user_profile(user_found)
+
 
 def Email_exit(email):
 
@@ -129,6 +122,66 @@ def Email_exit(email):
 
             return i
 
+def user_edit_data_choice_section(datas,email_id,user_found):
+# while(email_id !=None):
+    edit_email_option = str(input("Enter [1] to edit email: \nEnter [2] to edit username: \nEnter [3] to edit password: \nEnter [4] to edit age: \nEnter [5] to edit phone: \nEnter [6] to exit :\n"))
+    if edit_email_option == '1':
+        print("Edit Email: \n")
+        edit_email_data = str(input("Edit email:... "))
+        datas[email_id]['email'] = edit_email_data
+        printing_single_data(datas,email_id)
+        # record in txt file left
+        print("\nSuccessfully updated email:... \n")
+        recording_all_data(db)
+        # print(db)
+
+    elif edit_email_option == '2':
+        print("Edit Username: \n")
+        edit_username_data = str(input("Edit Username :... "))
+        datas[email_id]['u_name'] = edit_username_data
+        printing_single_data(datas, email_id)
+        # record in txt file left
+        print("\nSuccessfully updated username:... \n")
+        recording_all_data(db)
+
+    elif edit_email_option == '3':
+        print("Edit Password: \n")
+        edit_password_data = str(input("Edit password:... "))
+        datas[email_id]['password'] = edit_password_data
+        printing_single_data(datas, email_id)
+        # record in txt file left
+        print("\nSuccessfully updated password:... \n")
+        recording_all_data(db)
+
+    elif edit_email_option == '4':
+        print("Edit Age: \n")
+        edit_age_data = str(input("Edit Age:... "))
+        datas[email_id]['age'] = edit_age_data
+        printing_single_data(datas, email_id)
+        # record in txt file left
+        print("\nSuccessfully updated age:... \n")
+        recording_all_data(db)
+
+
+    elif edit_email_option == '5':
+        print("Edit Phone: \n")
+        edit_age_data = str(input("Edit Phone:... "))
+        datas[email_id]['phone'] = edit_age_data
+        printing_single_data(datas, email_id)
+        # record in txt file left
+        print("\nSuccessfully updated phone:... \n")
+        recording_all_data(db)
+
+    elif edit_email_option == '6':
+        print("exit: \n")
+        user_profile(user_found)
+        recording_all_data(db)
+
+    else:
+        print("Invalid Option \n")
+        user_edit_data_choice_section(datas,email_id,user_found)
+        # break
+    user_profile(user_found)
 
 def create_txt_file_if_not_exit():
     try:
@@ -154,9 +207,13 @@ def printing_all_data():
         datas = db
         # print('db \n', db)
         counter = len(db)
+        total = counter
         # print('counter \n', counter)
+        print("Total User Accounts : {0}".format(total))
+        print("..................................\n")
         for i in range(len(datas)):
-            print("user_id: {0} username: {1} email: {2} password: {3} phone_number: {4} age: {5}".format(i,datas[i]['u_name'],datas[i]['email'],datas[i]['password'],datas[i]['phone'],datas[i]['age']))
+            print("user_id: {0} \nusername: {1} \nemail: {2} \npassword: {3} \nphone_number: {4} \nage: {5}\n".format(i,datas[i]['u_name'],datas[i]['email'],datas[i]['password'],datas[i]['phone'],datas[i]['age']))
+        print("..................................\n")
 
 def printing_single_data(datas,i):
     print("\nuser_id: {0} \nusername: {1} \nemail: {2} \npassword: {3} \nphone_number: {4} \nage: {5} \n".format(i,datas[i]['u_name'], datas[i]['email'], datas[i]['password'], datas[i]['phone'], datas[i]['age']))

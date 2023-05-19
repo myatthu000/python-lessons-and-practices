@@ -7,12 +7,12 @@ from time import sleep
 
 db={}
 global counter
-counter: int = 0
+counter : int = 0
 file_name = "2-assignment-test.txt"
 
 
 global email_exit
-email_exit=-1
+email_exit = -1
 
 def main_sector():
     print("Welcome from Form")

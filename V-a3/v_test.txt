@@ -1,0 +1,2 @@
+{'email': 'thu@gmail.com', 'name': 'thu', 'phone': '098888', 'address': '86x104', 'password': 'password'}
+{'email': 'myat@gmail.com', 'name': 'myat', 'phone': '091111', 'address': '86x105', 'password': 'password'}

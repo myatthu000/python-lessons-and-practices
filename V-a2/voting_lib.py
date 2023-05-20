@@ -1,21 +1,32 @@
+from ast import literal_eval
+from time import sleep
+
+
 class Voting:
     def __init__(self):
         print("Working in Voting special method or constructor ")
-        self.students = {0: {"name": "James", "v_mark": 0, "voter": [], "std_points": 0},
-                         1: {"name": "John", "v_mark": 0, "voter": [], "std_points": 0},
-                         2: {"name": "Rooney", "v_mark": 0, "voter": [], "std_points": 0},
-                         3: {"name": "Ronaldo", "v_mark": 0, "voter": [], "std_points": 0},
-                         4: {"name": "Messi", "v_mark": 0, "voter": [], "std_points": 0}
-                         }
+        self.students_datas = {0: {"name": "James", "v_mark": 0, "voter": [], "std_points": 0},
+                                 1: {"name": "John", "v_mark": 0, "voter": [], "std_points": 0},
+                                 2: {"name": "Rooney", "v_mark": 0, "voter": [], "std_points": 0},
+                                 3: {"name": "Ronaldo", "v_mark": 0, "voter": [], "std_points": 0},
+                                 4: {"name": "Messi", "v_mark": 0, "voter": [], "std_points": 0}
+                                 }
+
+        self.students: dict = {}
         self.db: dict = {}
         self.id: int = 0
 
         self.l_id: int = 0
         self.money: int =0
         self.points: int =0
+        self.filename_user = "user_text.txt"
+        self.voting_txt = "voter_text.txt"
+        self.counter = 0
 
     def main_option(self):
         option = 0
+        self.printing_all_data()
+        self.printing_all_data_of_students()
         try:
             option = int(input("Press 1 to Register\nPress 2 to Login\nPress 3 to Exit"))
         except Exception as err:
@@ -31,6 +42,7 @@ class Voting:
         else:
             print("Invalid Option")
             self.main_option()
+
 
     def register(self):
         print("This is register option ")
@@ -61,8 +73,9 @@ class Voting:
 
                         self.db.update(data_form)
 
-                        self.printingAllData()
-                        print("-------\n")
+                        self.printing_all_data()
+                        print("\n")
+                        self.recording_all_data_of_user(self.db)
                         self.single_printing_function(self.id)
         except Exception as err:
             print("Invalid User Input!Try Again Sir!")
@@ -133,6 +146,7 @@ class Voting:
 
 
     def login(self):
+        self.printing_all_data()
         print("This is login option ")
         length = len(self.db)
         try:
@@ -152,28 +166,64 @@ class Voting:
         except Exception as err:
             print(err, "\nInvalid input:")
 
-    def printingAllData(self):
-        for i in range(len(self.db)):
-            print(self.db[i])
+
+    # def printingAllData(self):
+    #     for i in range(len(self.db)):
+    #         print(self.db[i])
             # print("id :{0} - name :{1} - email :{2} - money :{3} - points :{4} - phone-no :{5} - password :{6}".format(self.db[i]["id"],self.db[i]["name"],self.db[i]["email"],self.db[i]["money"],self.db[i]["points"],self.db[i]["phone"],self.db[i]["password"]))
         # print("Database :{} \n".format(self.db))
 
+    def printing_all_data(self):
+        if self.db != {}:
 
-    def printingAllStudents(self):
-        for i in range(len(self.students)):
-            print("Id:{} - Name {} - Current Vote Mark: {} - Voter: {} - Student Points {}".format(i, self.students[i]["name"],
-                                                                   self.students[i]["v_mark"], self.students[i]["voter"], self.students[i]["std_points"],
-                                                                   ))
+            print("\n","-"*30,"Accounts info","-"*30,"\n")
+            datas = self.db
+            # print('self.db \n', self.db)
+            counter = len(self.db)
+            total = counter
+            # print('counter \n', counter)
+            print("Total User Accounts : {0}".format(total))
+            print("."*100, "\n")
+            for i in range(len(datas)):
+                print(datas[i])
+
+            print("." * 100, "\n")
+
+    def printing_all_data_of_students(self):
+        if self.students != {}:
+
+            print("\n","-"*30,"Accounts info","-"*30,"\n")
+            datas = self.students
+            # print('self.db \n', self.db)
+            counter = len(self.students)
+            total = counter
+            # print('counter \n', counter)
+            print("Total Students to vote : {0}".format(total))
+            print("."*100, "\n")
+            for i in range(len(datas)):
+                print(datas[i])
+
+            print("." * 100, "\n")
+
+    # def printingAllStudents(self):
+    #     for i in range(len(self.students)):
+    #         print("Id:{} - Name {} - Current Vote Mark: {} - Voter: {} - Student Points {}".format(i, self.students[i]["name"],
+    #                                                                self.students[i]["v_mark"], self.students[i]["voter"], self.students[i]["std_points"],
+    #                                                                ))
 
 
     def single_printing_function(self, l_id):
         try:
+            print("-"*30,"Your account information","-"*30)
             user = self.db[l_id]
+            print("-"*100,"\n")
             print(user)
             # print("id :{0} - name :{1} - email :{2} - money :{3} - points :{4} - phone-no :{5}".format(user["id"],user["name"],user["email"],user["money"],user["points"],user["phone"]))
             # print("\nYou vote this students :\nname: {}, v_mark: {}, voter: {}".format(user["id"],user["name"],user["email"],user["money"],user["points"],user["phone"]))
+            print("-"*100,"\n")
         except Exception as errspf:
             print("Error at -->",errspf)
+
 
     def after_vote_points_to_stds(self,v_id,l_id):
         try:
@@ -195,12 +245,12 @@ class Voting:
 
                 # students
                 std_name = self.students[v_id]["name"]
+                # self.db.update()
 
                 print("voter :{0}\nresult points :{1}\nstudents :{2}\nstudent points {3}\n".format(name, original_points, std_name, std_points))
 
         except Exception as erravp:
             print("Error --->",erravp)
-
 
 
     def user_sector(self, l_id):
@@ -232,9 +282,12 @@ class Voting:
                     print("Voter: ",self.students[v_id]["voter"][i])
 
                 self.after_vote_points_to_stds(v_id, self.l_id)
+                self.recording_all_data_of_user(self.db)
+                self.recording_all_data_of_student(self.students)
+                self.single_printing_function(l_id)
 
                 print("\n")
-                self.printingAllStudents()
+                self.printing_all_data_of_students()
             except Exception as err:
                 print(err)
 
@@ -255,6 +308,82 @@ class Voting:
                         print("Invalid option after vote!")
                 except Exception as err:
                     print(err)
+
+
+    def create_txt_file_if_not_exit(self):
+        try:
+            with open(self.voting_txt, 'x') as createFileVoter:
+                createFileVoter.close()
+                print("File created successfully \n")
+        except FileExistsError:
+            print("voter File already created")
+
+        try:
+            with open(self.filename_user, 'x') as createFileUser:
+                createFileUser.close()
+                print("File created successfully \n")
+
+        except FileExistsError:
+            print("User File already created")
+
+
+    def recording_all_data_of_user(self,datas):
+        # pass
+        # global db
+        # db.update(data)
+        try:
+            with open(self.filename_user, 'w') as writeFile:
+                write = writeFile.write("{0}".format(str(datas)))
+        except Exception as uError:
+            print("Error -->",uError)
+
+
+    def recording_all_data_of_student(self, datas):
+        try:
+            with open(self.voting_txt, 'w') as writeFileV:
+                write = writeFileV.write("{0}".format(str(datas)))
+        except Exception as rsError:
+            print("Error -->",rsError)
+
+
+    def loading_all_data_of_user(self):
+        try:
+            print("User Data is loading .....")
+            sleep(1.5)
+            print("User Data is successfully loaded .....")
+            sleep(1.5)
+            with open(self.filename_user, 'r') as readFile:
+                read = readFile.read()
+                # print("dsdasdf ", read=='')
+                if read != '':
+                    read = literal_eval(read)
+                    self.db = read
+                    self.counter = len(self.db)
+                else:
+                    print("User Data is Empty \n")
+        except Exception as lerror:
+            print("Data loading fail.\n", lerror)
+
+    def loading_all_data_of_students(self):
+        try:
+            print("Student Data is loading .....")
+            sleep(1.5)
+            print("Student Data is successfully loaded .....")
+            sleep(1.5)
+            with open(self.voting_txt, 'r') as readFile:
+                read = readFile.read()
+                if read != '':
+                    read = literal_eval(read)
+                    self.students = read
+                    self.counter = len(self.students)
+                else:
+                    print("Student Data is Empty \n")
+                    self.students.update(self.students_datas)
+                    self.recording_all_data_of_student(self.students)
+
+        except Exception as lerror:
+            print("Data loading fail.\n", lerror)
+
 
 # ဆက်ရေး ရန် 8-5-2023
 # voter များအား စာရင်း မှတ်ပေးရန်

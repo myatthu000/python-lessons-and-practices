@@ -220,8 +220,10 @@ def printing_all_data():
             print("user_id: {0} \nusername: {1} \nemail: {2} \npassword: {3} \nphone_number: {4} \nage: {5}\n".format(i,datas[i]['u_name'],datas[i]['email'],datas[i]['password'],datas[i]['phone'],datas[i]['age']))
         print("..................................\n")
 
+
 def printing_single_data(datas,i):
     print("\nuser_id: {0} \nusername: {1} \nemail: {2} \npassword: {3} \nphone_number: {4} \nage: {5} \n".format(i,datas[i]['u_name'], datas[i]['email'], datas[i]['password'], datas[i]['phone'], datas[i]['age']))
+
 
 def loading_all_data():
     global db, counter

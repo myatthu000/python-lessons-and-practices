@@ -69,7 +69,7 @@ class Voting:
                         self.showMoney_points()
 
                         data_form: dict = {self.id: {"email": r_email, "name": r_name, "phone": r_phone,
-                                                     "address": r_address, "password": r_pass1,"show_money": int(money), "points": int(points)}}
+                                                     "address": r_address, "password": r_pass1,"show_money": int(self.money), "points": int(self.points)}}
 
                         self.db.update(data_form)
 
@@ -104,7 +104,7 @@ class Voting:
 
     def showMoney_points(self):
         try:
-            global money, points
+            # global self.money, self.points
             show_money : str = ""
             buy_points : str = ""
 
@@ -117,14 +117,14 @@ class Voting:
                     print("Invalid Amounts")
                 else:
                     print("Valid Amounts, you can buy some points to vote:")
-                    money = show_money
+                    self.money = show_money
                 showMoney = True
                 break
 
             while buyPoints is False:
                 try:
                     buy_points = input("Buy points to vote:\n1 Points 5 $:")
-                    pay_price = int(buy_points) * 5
+                    pay_price = int(buy_points) * 500
                     after_buy_points_money = int(show_money) - pay_price
 
                     if after_buy_points_money < 0:
@@ -133,8 +133,8 @@ class Voting:
                         print("You bought points {0} for {1} $.\nYour balance is now {2} $".format(buy_points, pay_price, after_buy_points_money))
 
                         buyPoints = False
-                        money = after_buy_points_money
-                        points = buy_points
+                        self.money = after_buy_points_money
+                        self.points = buy_points
                     break
                 except Exception as err2:
                     print("--------",err2)
@@ -279,7 +279,7 @@ class Voting:
                 print("{} now voting mark is : {}".format(self.students[v_id]["name"],self.students[v_id]["v_mark"]))
 
                 for i in range(len(self.students[v_id]["voter"])):
-                    print("Voter: ",self.students[v_id]["voter"][i])
+                    print("Voter: ", self.students[v_id]["voter"][i])
 
                 self.after_vote_points_to_stds(v_id, self.l_id)
                 self.recording_all_data_of_user(self.db)

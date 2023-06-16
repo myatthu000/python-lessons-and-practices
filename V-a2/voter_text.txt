@@ -1,0 +1,1 @@
+{0: {'name': 'James', 'v_mark': 0, 'voter': [], 'std_points': 0}, 1: {'name': 'John', 'v_mark': 0, 'voter': [], 'std_points': 0}, 2: {'name': 'Rooney', 'v_mark': 0, 'voter': [], 'std_points': 0}, 3: {'name': 'Ronaldo', 'v_mark': 0, 'voter': [], 'std_points': 0}, 4: {'name': 'Messi', 'v_mark': 0, 'voter': [], 'std_points': 0}}

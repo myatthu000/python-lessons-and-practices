@@ -1,0 +1,16 @@
+        for i in candi.find({}, {"_id": 0, "name": 1, "vote_point": 1}):
+            # print(dic_data[i])
+            if data_list[1] == i["name"]:
+                print(i)
+                print("found : ", i["name"])
+                # id = i
+                # to_update = {id: {'name':  i["name"], 'vote_point':  i["vote_point"]}}
+                to_update = {'name': i["name"], 'vote_point': i["vote_point"]}
+                data_form.update(to_update)
+                sock.send(bytes(data_form, "utf-8"))
+                flag = 1
+
+        if flag == -1:
+            data = "User not found"
+            print(data)
+            sock.send(bytes(data, "utf-8"))

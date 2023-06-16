@@ -1,0 +1,41 @@
+    def register_checking(self, sock, data_list):
+        r_email = data_list[2]
+        r_flag = -1
+        sms = ''
+        for i in col.find({}, {"_id": 0, "email": 1}):
+            if i["email"] != r_email:
+                r_flag = 1
+                sms = i["info"]
+                # + "\nYou created new account."
+                # sms = "You created new account."
+                break
+            else:
+                print("Already taken by some user.")
+                r_flag = -1
+                # sms = {"register_checking": False, "message": "Already taken by some user."}
+                break
+
+        if r_flag == 1:
+            try:
+                r_name = data_list[1]
+                r_phone = data_list[4]
+                r_password = data_list[3]
+                user_id = random.randint(10, 10000)
+                info: str = "User data is" + str(r_name) + str(user_id) + "id : " + str(user_id)
+
+                data_form = {"_id": user_id, "name": r_name, "email": r_email, "phone": r_phone, "password": r_password,
+                             "info": info}
+
+                ids = col.insert_one(data_form)
+                print("inserted id :", ids.inserted_id)
+
+                str_data = bytes(sms, 'utf-8')
+                # str_data
+                sock.send(str_data)
+
+            except Exception as err:
+                print("err ->", err)
+
+        else:
+            str_data = bytes("There must be a problem in registering!", 'utf-8')
+            sock.send(str_data)

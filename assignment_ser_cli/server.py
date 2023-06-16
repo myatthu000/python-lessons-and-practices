@@ -63,18 +63,32 @@ class TCPserver():
 
 
     def command_check(self,received_data):
-        if received_data == self.cus_command[0] or received_data == "get all data":
+        # count:int = 0
+        # datas:list = []
+        if received_data.lower() == self.cus_command[0] or received_data.lower() == "get all data":
             print("-" * 50, '\n')
             print("You typed command \"{0}\"".format(received_data))
             print("-" * 50)
-            datas = self.collection.find({}, {"_id": 0, "name": 1, "email": 1, "phone": 1})
-            count = self.collection.count_documents({})
-            if count == 0:
-                print("Data is Empty. Please Fill data first.")
-            else:
-                for i in datas:
-                    print("[Name] :" + i['name'], "[Email] :" + i['email'], "[Phone] :" + str(i['phone']))
-            print("-" * 50, '\n')
+            try:
+                datas = self.collection.find({}, {"_id": 0, "name": 1, "email": 1, "phone": 1})
+                # print("--->",type(datas))
+                count = self.collection.count_documents({})
+                if count == 0:
+                    print("Data is Empty. Please Fill data first.")
+                else:
+                    for i in datas:
+                        print("[Name] :" + i['name'], "[Email] :" + i['email'], "[Phone] :" + str(i['phone']))
+                print("-" * 50, '\n')
+            except Exception as err:
+                print("Connection error\n", err)
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

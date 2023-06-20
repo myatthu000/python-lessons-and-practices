@@ -1,0 +1,53 @@
+        for i in candi.find({}, {"_id": 0, "name": 1, "vote_point": 1}):
+            # print(dic_data[i])
+            if data_list[1] == i["name"]:
+                print(i)
+                print("found : ", i["name"])
+                # id = i
+                # to_update = {id: {'name':  i["name"], 'vote_point':  i["vote_point"]}}
+                to_update = {'name': i["name"], 'vote_point': i["vote_point"]}
+                data_form.update(to_update)
+                sock.send(bytes(data_form, "utf-8"))
+                flag = 1
+
+        if flag == -1:
+            data = "User not found"
+            print(data)
+            sock.send(bytes(data, "utf-8"))
+
+
+        try:
+            c_flag = -1
+            # print("dl ----- ",data_list)
+            data_form: dict = {}
+            point: int = 0
+
+            for i in col.find({}, {"_id": 0, "name": 1, "email": 1, "info":1, "point": 1}):
+                if i['email'] == data_list[2]:
+                    if i['point'] != 0:
+                        for i in candi.find({}, {"_id": 0, "name": 1, "vote_point": 1}):
+                            # print("does not match --> ::::: ",i)
+                            if i['name'] == data_list[1]:
+                                print("Candidate found", i["name"])
+                                # print("--->", i)
+                                point = int(i["vote_point"]) + 1
+
+                                to_update = {'name': i["name"], 'vote_point': point}
+                                data_form.update(to_update)
+
+                                # database update for user
+                                filter_for_candidate = {"name": data_list[1]}
+                                to_update_db_for_candidate = {"$set": {"vote_point": point}}
+                                candi.update_one(filter_for_candidate, to_update_db_for_candidate)
+                                print("After data update for Candidate")
+                                c_flag = 1
+                                # break
+                            else:
+                                print("User does not have enough to vote: ")
+                                # break
+                            # break
+                        break
+                    break
+
+            print("Data form Candidate >>>> : ", data_form)
+            return [c_flag]

@@ -83,9 +83,9 @@ class TCPserver():
         for i in col.find({}, {"_id": 0, "email": 1, "password": 1, "info": 1, "point": 1}):
             if i["email"] == l_email and i["password"] == l_password:
                 flag = 1
+
                 sms = {"email": i["email"], "info": i["info"], "point": i["point"]}
                 sms = json.dumps(sms)
-
                 break
 
         if flag == 1:
@@ -106,7 +106,6 @@ class TCPserver():
                 to_send.update(to_update)
 
             to_send = json.dumps(to_send)
-
             sock.send(bytes(to_send, "utf-8"))
 
             print("dataList", data_list)
@@ -117,46 +116,100 @@ class TCPserver():
             sock.send(bytes("candi_db_error", "utf-8"))
 
     def vote_accept(self, sock, data_list):
-        candi_flag = -1
-        u_flag = -1
-
-        name_of_candi = data_list[1]
-        email_of_l_user = data_list[2]
-        point_of_l_user = int(data_list[3])
-
         print("Data list: ", data_list)
+
+        pass_flag = self.update_candi_data(sock,data_list)
+        print('pass_flag : ', pass_flag)
+        if pass_flag == 1:
+            update_check_user_info :list = self.update_login_user(sock,data_list)
+            print("update user check info : ", update_check_user_info)
+            if update_check_user_info[0] == 1:
+                print("Update user info success")
+                sms = json.dumps(update_check_user_info[1])
+                sock.send(bytes(sms, "utf-8"))
+
+
+    def update_candi_data(self, sock, data_list:list):
+        candi_flag = -1
+        name_of_candi = data_list[1]
         data_form_for_candi = {}  # for candi
-        data_form_for_user = {}  # for candi
+        pass_flag: int = -1
 
         for i in candi.find({}, {"_id": 0, "name": 1, "vote_point": 1}):
             # print(dic_data[i])
             if name_of_candi == i["name"]:
                 # print("found : ", i)
                 vote_point = int(i['vote_point']) + 1
-                point_of_l_user = point_of_l_user - 1
-                # id = i
-                # to_update = {id: {'name':  i["name"], 'vote_point':  i["vote_point"]}}
+
                 to_update = {'name': i["name"], 'vote_point': vote_point}
                 data_form_for_candi.update(to_update)
+
+                # database update for candidate
+                filter_mon = {"name": i["name"]}
+                to_update_db = {"$set": {"vote_point": vote_point}}
+                candi.update_one(filter_mon, to_update_db)
+
                 json_str_to_send = json.dumps(data_form_for_candi)
                 sock.send(bytes(json_str_to_send, "utf-8"))
 
                 candi_flag = 1
-
-        for i in col.find({}, {"_id": 0, "email": 1, "password": 1, "info": 1, "point": 1}):
-            if email_of_l_user == i["email"]:
-                # print("found user : ", i)
-                to_update_user = {"email": i["email"], "info": i["info"], "point": point_of_l_user}
-                data_form_for_user.update(to_update_user)
-
+                pass_flag = 1
+                break
 
         if candi_flag == -1:
             data = "User not found"
             print(data)
             sock.send(bytes(data, "utf-8"))
+            pass_flag = -1
 
-        print("User : ",data_form_for_user)
-        print("Candidate : ",data_form_for_candi)
+        print("Candidate : ", data_form_for_candi)
+        return pass_flag
+
+
+    def update_login_user(self, sock, data_list:list):
+        update_user_login_info = -1
+        u_flag = -1
+        data_form_for_user = {}  # for candi
+        email_of_l_user = data_list[2]
+        point_of_l_user = int(data_list[3])
+
+        for i in col.find({}, {"_id": 0, "email": 1, "password": 1, "info": 1, "point": 1}):
+            if email_of_l_user == i["email"]:
+                # print("found user : ", i)
+                current_point = point_of_l_user - 1
+                # print('current point : ', current_point)
+
+                to_update_user = {"email": i["email"], "info": i["info"], "point": current_point}
+                data_form_for_user.update(to_update_user)
+                # print("from server : ", data_form_for_user)
+
+                # database update for user
+                filter_for_user = {"email": i["email"]}
+                to_update_db_for_user = {"$set": {"point": current_point}}
+                col.update_one(filter_for_user, to_update_db_for_user)
+                u_flag = 1
+                update_user_login_info = 1
+                break
+
+        # self.send_l_data_after_vote(sock, data_form_for_user)
+
+                # json_str_to_send = json.dumps(data_form_for_user)
+                # sock.send(bytes(json_str_to_send, "utf-8"))
+
+        if u_flag == -1:
+            data = "User not found"
+            print(data)
+            sock.send(bytes(data, "utf-8"))
+
+        print("User : ", data_form_for_user)
+        return [update_user_login_info,data_form_for_user]
+
+    # def send_l_data_after_vote(self,sock,user_info):
+    #     print("user data already send",user_info)
+    #     # pass
+    #     # sms = {"email": i["email"], "info": i["info"], "point": i["point"]}
+    #     user_info = json.dumps(user_info)
+    #     sock.send(bytes(user_info,"utf-8"))
 
 
     def email_checking(self, email, sock):

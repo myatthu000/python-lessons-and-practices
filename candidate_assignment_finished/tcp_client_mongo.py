@@ -1,27 +1,27 @@
 import socket
 import json
 
+'''
+    Assignment 7
+    Assignment is about the candidate process update 
+    both col and candi databases
+    Note : It is not include the part of registrations process
+    Registration process is done from previous assignment
+    The source code copied from winhtut, NCC directly. 
+'''
 
 class TCPclient():
     def __init__(self, sms):
         self.target_ip = 'localhost'
         self.target_port = 9998
         self.input_checking(sms)
+        global user_info
+
 
     def client_runner(self):
 
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((self.target_ip, self.target_port))
-
-        # client.send(self.client_sms)
-        #
-        #     received_from_server = client.recv(4096)
-        #
-        #     recv_sms = received_from_server.decode("utf-8")
-        #
-        #     print("$:", recv_sms)
-        #
-        #     client.close()
         return client  # to send and received data
 
     def input_checking(self, sms):
@@ -50,6 +50,7 @@ class TCPclient():
 
     def login(self, info):
         try:
+            # global user_info
             print("This is login Form")
             l_email = input("Enter your email to login:")
             l_pass = input("Enter your password to login:")
@@ -60,8 +61,8 @@ class TCPclient():
             client.send(sms)
             received_from_server = client.recv(4096)
             user_info: dict = json.loads(received_from_server.decode("utf-8"))
+            # user_info = user_info.update(user_info_data)
             self.option_choice(user_info, client)
-
 
         except Exception as err:
             print(err)
@@ -76,7 +77,9 @@ class TCPclient():
             if option == '1':
                 self.user_option(user_info, client)
             elif option == '2':
-                self.input_checking("from_option")  # to write more option
+                # self.input_checking("from_option")  # to write more option
+                sms = input("Enter some data to send:")
+                self.input_checking(sms)
             elif option == '3':
                 exit(1)
             else:
@@ -90,11 +93,13 @@ class TCPclient():
         try:
             option = input("Press 1 To Vote:\nPress 2 to get more points:\nPress 3 to Transfer Point:\n"
                            "Press 4 To get Voting Ranking:\nPress 5 to change user information \nPress 6 to Delete Acc:\nPress 7 "
-                           "to Exit:")
+                           "to Exit: \nPress 8 to go back")
 
             if option == '1':
                 self.voting(user_info)
-
+                self.send_vote(user_info, client)
+            elif option == '8':
+                self.option_choice(user_info, client)
             else:
                 print("Invalid option")
                 self.user_option(user_info, client)
@@ -105,40 +110,52 @@ class TCPclient():
 
     def voting(self, user_info):
         client = self.client_runner()
-        # sms = "candidate_info"+" "+user_vote
         sms = bytes("candidate_info", "utf-8")
         client.send(sms)
 
         info = client.recv(4096)
         candi_info = json.loads(info.decode("utf-8"))
-        print(candi_info)
+        print("Candidate info >>>> ", candi_info)
         print(type(candi_info))
         for i in candi_info:
             print("No: ", i, "Name: ", candi_info[i]["name"], "Point", candi_info[i]["vote_point"])
 
-        # sms = "candidate_info"+" "+ str(user_vote)
-        # client.send(bytes(str(sms), "utf-8"))
+        print("Voting method work : ")
         client.close()
-        self.vote_send(user_info)
 
-
-    def vote_send(self, user_info):
+    def send_vote(self, user_info, client):
         try:
-            to_send_email = user_info['email']
-            to_send_point = str(user_info['point'])
-            client = self.client_runner()
-            user_vote = str(input("Enter number to vote: "))
-            sms = bytes("vote_send" + " " + user_vote + " " + to_send_email + " " + to_send_point, "utf-8")
-            client.send(sms)
+            if user_info['point'] != 0:
+                client = self.client_runner()
+                user_vote = str(input("Enter candidate name to vote : "))
+                to_send_email = user_info['email']
 
-            info = client.recv(4096)
-            by_voted_user = json.loads(info.decode("utf-8"))
-            print(by_voted_user)
+                sms = bytes("vote_send" + " " + user_vote + " " + to_send_email, "utf-8")
+                client.send(sms)
+                # print("Send from client sms", sms)
 
-            client.close()
+                received_message_from_server = client.recv(4096)
+                data = json.loads(received_message_from_server.decode("utf-8"))
+                print("Send vote method work : >>>> ")
+                # print("Send vote method work : >>>> ", data)
+                message, candi_data, user_data = data['message'], json.loads(data['candi_data']), json.loads(data['user_data'])
 
-        except Exception as err:
-            print("Something wrong in voting", err)
+                # print("message :::::::::::::::: ", message)
+                print("\ncandi_data :::::::::::::::: ", candi_data)
+                print("user_data :::::::::::::::: ", user_data,'\n')
+
+                user_info = user_data
+                print("User Info : ", user_info)
+
+                self.option_choice(user_info, client)
+            else:
+                print("User does not have enough point to vote: \n:::::::",user_info)
+                self.user_option(user_info, client)
+
+        except Exception as sErr:
+            print("Send Vote err : ",sErr)
+            self.voting(user_info)
+            self.send_vote(user_info,client)
 
 
     def register(self):

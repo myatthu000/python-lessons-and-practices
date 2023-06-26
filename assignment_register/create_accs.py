@@ -18,9 +18,10 @@ if __name__ == '__main__':
         point: int = 100
 
         info:str = "User data is myat"+str(i)+"id : "+str(user_id)
+        money:int = 0
 
         # data_form = {"_id": user_id,"name":name, "email": email,"phone": str(phone), "password": password, "info":info}
-        data_form = {"_id": user_id, "email": email, "password": password, "phone": str(phone), "info":info, "point":point}
+        data_form = {"_id": user_id, "email": email, "password": password, "phone": str(phone), "info":info, "point":point, "money":money}
 
         ids = collection.insert_one(data_form)
         print("inserted id :", ids.inserted_id)

@@ -1,0 +1,11 @@
+point = 20
+money = 500
+
+1 point 3 dollars
+20 points 60 dollars
+
+current_money = money - bought_points
+
+store_data = 0
+if first_vote_point_no > sec_vote_point_no:
+    store_data = first_vote_point_no

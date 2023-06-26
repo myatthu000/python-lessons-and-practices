@@ -62,6 +62,9 @@ class TCPserver():
             elif data_list[0] == "candidate_info":
                 self.candidate_info(sock)
 
+            elif data_list[0] == "get_more_points":
+                self.candidate_info(sock)
+
             elif data_list[0] == "vote_send":
                 self.accept_vote(data_list, sock)
                 # print("dt list ", data_list)

@@ -1,1 +1,1 @@
-{0: {'email': 'thu@gmail.com', 'name': 'thu', 'phone': '09999', 'address': 'asdfasdf', 'password': 'pass', 'show_money': 5000, 'points': 0}}
+{0: {'email': 'thu@gmail.com', 'name': 'thu', 'phone': '09999', 'address': 'asdfasdf', 'password': 'pass', 'show_money': 5000, 'points': 0}, 1: {'email': 'io@gmail.com', 'name': 'ioio', 'phone': '098888', 'address': 'asdfxasdf', 'password': 'pass', 'show_money': 50000, 'points': 299}}

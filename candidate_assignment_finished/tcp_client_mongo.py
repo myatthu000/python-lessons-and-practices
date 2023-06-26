@@ -108,6 +108,12 @@ class TCPclient():
             print(err)
             self.user_option(user_info, client)
 
+    def get_for_point(self, user_info):
+        try:
+            pass
+        except Exception as gError:
+            print("Get more point error :{}".format(gError))
+
     def voting(self, user_info):
         client = self.client_runner()
         sms = bytes("candidate_info", "utf-8")
